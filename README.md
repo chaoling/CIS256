@@ -1,2 +1,2 @@
-# ps_template
-a template for problem sets
+# problem_sets_template
+problem sets
