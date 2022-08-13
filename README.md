@@ -4,7 +4,13 @@
 
 Here’s a sample file: 
 
-```Arnold 90 Brown 84 Arnold 80 Cocher 77 Cocher 100 ```
+```python
+Arnold 90
+Brown 84 
+Arnold 80 
+Cocher 77 
+Cocher 100
+```
 
 Write a function that reads the data from the file into a dictionary. 
 Then continue prompting the user for names of students. 
