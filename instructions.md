@@ -1,27 +1,25 @@
 # Instructions  
 
-#### In a Caesar shift code, each letter in a message is shifted n places later in the alphabet (with Z wrapping around to A). 
+#### Suppose the file studentdata.txt contains information on grades students earned on various assignments. Each line has the last name of a student (which you can assume is one word) and the numeric grade that the student received. All grades are out of 100 points. Students can appear multiple times in the file. 
 
-#### For example, if n = 1, the word example becomes fybnqmf. 
-#### If n = 2, the word python becomes ravjqp. 
+Here’s a sample file: 
 
-#### Write a function called caesar_shift() that takes two parameters. 
-The first is a word to encode. 
+```Arnold 90 Brown 84 Arnold 80 Cocher 77 Cocher 100 ```
 
-The second is the number of places to shift. 
+Write a function that reads the data from the file into a dictionary. 
+Then continue prompting the user for names of students. 
 
-It returns the shifted text. 
+For each student, it should print the average of that student’s grades. 
+Stop prompting when the user enters the name of a student not in the dictionary. 
 
-You can assume the first parameter is a single word with no spaces or other punctuation. 
-
-You may also assume it is all lowercase. 
-
-Some sample calls: 
-
-```>>> caesarShift(’example’, 1) ’fybnqmf’ ```
-
-```>>> caesarShift(’example’, -1) ’dwzlokd’ ```
-
-```>>> caesarShift(’python’, 2) ’ravjqp’ ```
-
-```>>> caesarShift(’pecan’, 4) ’tiger’```
+### Sample runs:
+```
+Enter name: Arnold 
+The average for Arnold is: 85.0 
+Enter name: Brown 
+The average for Brown is: 84.0 
+Enter name: Cocher 
+The average for Cocher is: 88.5 
+Enter name: Doherty 
+Goodbye! 
+```
