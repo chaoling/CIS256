@@ -1,8 +1,11 @@
-def caesarShift(txt: str, shift: int) -> str:
+def fib_gen(n):  # generator function to provide first n fib numbers
+    #TODO
     pass
 
 
-assert caesarShift('example', 1) == 'fybnqmf', 'failed test case 1'
-assert caesarShift('example', -1) == 'dwzlokd', 'failed test case 2'
-assert caesarShift('python', 2) == 'ravjqp', "failed test case 3"
-assert caesarShift('pecan', 4) == 'tiger', "failed test case 4"
+#test:
+n = int(input("please enter a positive integer: n= "))
+for num in fib_gen(n):
+    print(num, end=",")
+print()
+print(f"sum of first {n} fib number is: {sum(x for x in fib_gen(n))}")
