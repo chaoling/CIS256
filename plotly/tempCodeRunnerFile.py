@@ -1,0 +1,1 @@
+.line(df_stocks, x='date', y='GOOG', labels = {'x': "Date", 'y': "Price"})
