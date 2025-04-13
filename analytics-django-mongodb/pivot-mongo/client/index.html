@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Flexmonster Pivot Table & Charts</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.flexmonster.com/flexmonster.js"></script>
+</head>
+
+<body>
+    <div id="pivot"></div>
+    <script type="text/javascript">
+        var pivot = new Flexmonster({
+            container: "#pivot",
+            componentFolder: "https://cdn.flexmonster.com/",
+            height: 600,
+            toolbar: true,
+            report: {
+                "dataSource": {
+                    "type": "api",
+                    "url": "http://localhost:9204/mongo",
+                    "index": "fm-product-sales"
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
