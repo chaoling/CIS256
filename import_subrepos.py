@@ -58,6 +58,16 @@ def has_valid_head(repo_path):
     head_file = Path(repo_path) / ".git" / "HEAD"
     return head_file.exists() and head_file.read_text().strip().startswith("ref:")
 
+def has_commits(repo_path):
+    result = subprocess.run(
+        "git rev-parse HEAD",
+        cwd=repo_path,
+        shell=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+    return result.returncode == 0
+
 def get_default_branch(repo_path):
     head_file = Path(repo_path) / ".git" / "HEAD"
     if head_file.exists():
@@ -110,9 +120,13 @@ def main():
         else:
             shutil.move(repo_path, temp_path)
 
-        # Validate repo has HEAD
+        # Validate repo
         if not dry_run and not has_valid_head(temp_path):
-            print(f"❌ Skipping: {temp_path} does not have a valid HEAD.")
+            print(f"❌ Skipping: {temp_path} has no valid HEAD.")
+            continue
+
+        if not dry_run and not has_commits(temp_path):
+            print(f"⚠️ Skipping: {temp_path} has no commits.")
             continue
 
         # Detect branch
@@ -131,7 +145,6 @@ def main():
             print(f"🧹 Removing leftover .git from {prefix_path}")
             shutil.rmtree(prefix_path / ".git")
 
-        # Clean up staged stuff
         if not dry_run:
             print("🔍 Checking for uncommitted changes...")
             if has_uncommitted_changes(cwd=root):
