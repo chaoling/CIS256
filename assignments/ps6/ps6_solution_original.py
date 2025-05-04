@@ -65,9 +65,9 @@ class SimpleVirus(object):
         False.
         """
 
-        arr = [True, False]
-        ans = np.random.choice(arr, 1, p=[self.clearProb, 1 - self.clearProb])
-        return ans
+        p1 = self.clearProb
+        p1 = p1 if p1 >= 0 else 0
+        return random.random() < p1
 
     def reproduce(self, popDensity):
         """
@@ -89,14 +89,13 @@ class SimpleVirus(object):
         NoChildException if this virus particle does not reproduce.               
         """
 
-        arr = [True, False]
         p1 = self.maxBirthProb * (1 - popDensity)
-        p1 = p1 if p1 >= 0 else 0
-        ans = np.random.choice(arr, 1, p=[p1, 1 - p1])
+        p1 = max(0, min(p1, 1))  # Ensure p1 is between 0 and 1
+        ans = random.random() < p1
         if ans:
             return SimpleVirus(self.maxBirthProb, self.clearProb)
         else:
-            raise (NoChildException)
+            raise NoChildException()
 
 
 class Patient(object):
@@ -168,6 +167,8 @@ class Patient(object):
                         self.viruses.append(new_virus)
                 except NoChildException as e:
                     print(e)
+        
+        return self.getTotalPop()
 
 
 #
@@ -325,26 +326,24 @@ class ResistantVirus(SimpleVirus):
         NoChildException if this virus particle does not reproduce.
         """
 
-        arr = [True, False]
+        if not all(self.isResistantTo(drug) for drug in activeDrugs):
+            raise NoChildException("Virus is not resistant to all active drugs")
+
         p1 = self.maxBirthProb * (1 - popDensity)
         p1 = p1 if p1 >= 0 else 0
-        is_birth = np.random.choice(arr, 1, p=[p1, 1 - p1])
-        is_resistant = all(
-            [self.resistances.get(drug, False) for drug in activeDrugs])
-        ans = np.random.choice(arr, 1, p=[p1, 1 - p1])
-
-        if is_resistant and is_birth:
-            resistance_offspring = {
-                k: (not v if np.random.choice(
-                    arr, 1, p=[self.mutProb, 1 - self.mutProb]) else v)
-                for k, v in self.resistances.items()
-            }
+        ans = random.random() < p1
+        if ans:
+            new_resistances = {}
+            for drug, res in self.resistances.items():
+                if random.random() < self.mutProb:
+                    new_resistances[drug] = not res
+                else:
+                    new_resistances[drug] = res
             return ResistantVirus(self.maxBirthProb, self.clearProb,
-                                  resistance_offspring, self.mutProb)
+                                  new_resistances, self.mutProb)
         else:
-            raise (NoChildException)
-
-
+            raise NoChildException("Virus did not reproduce")
+        
 class TreatedPatient(Patient):
     """
     Representation of a patient. The patient is able to take drugs and his/her
